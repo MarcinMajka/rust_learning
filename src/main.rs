@@ -1,22 +1,29 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::{ffi::OsStr, fs, io};
 
-fn print_paths_to_files_with_extension(path: &Path, ext: Option<&OsStr>) -> io::Result<()> {
+fn collect_paths_with_extension(path: &Path, ext: Option<&OsStr>) -> io::Result<Vec<PathBuf>> {
+    let mut sgf_paths: Vec<PathBuf> = Vec::new();
+
     for entry in fs::read_dir(path)? {
         let path = entry?.path();
         if path.is_dir() {
-            print_paths_to_files_with_extension(&path, ext)?;
+            sgf_paths.extend(collect_paths_with_extension(&path, ext)?);
         } else if path.extension() == ext {
-            println!("Path: {:?}", path);
+            sgf_paths.push(path);
         }
     }
-    Ok(())
+
+    Ok(sgf_paths)
 }
 
 fn main() -> io::Result<()> {
     let path: &Path = Path::new(".");
     let extension = Some(OsStr::new("sgf"));
-    print_paths_to_files_with_extension(path, extension)?;
+    let sgfs = collect_paths_with_extension(path, extension)?;
+
+    for path in sgfs {
+        println!("{:?}", path);
+    }
 
     Ok(())
 }
