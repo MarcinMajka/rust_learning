@@ -2,7 +2,7 @@ use std::path::{Path, PathBuf};
 use std::{ffi::OsStr, fs, io};
 
 mod dir_and_file_manipulation;
-use crate::dir_and_file_manipulation::{create_file, test_create_dir};
+use crate::dir_and_file_manipulation::{create_file, read_file, test_create_dir};
 
 fn collect_paths_with_extension(path: &Path, ext: Option<&OsStr>) -> io::Result<Vec<PathBuf>> {
     let mut sgf_paths: Vec<PathBuf> = Vec::new();
@@ -22,6 +22,7 @@ fn collect_paths_with_extension(path: &Path, ext: Option<&OsStr>) -> io::Result<
 fn main() -> io::Result<()> {
     test_create_dir();
     create_file();
+    read_file();
 
     let path: &Path = Path::new(".");
     let extension = Some(OsStr::new("sgf"));

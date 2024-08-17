@@ -1,5 +1,27 @@
 use std::fs;
 
+pub fn read_file() {
+    let file_path_str = "./dir/file03.txt";
+    let read_result = std::fs::read(file_path_str);
+
+    let convert_bytes_to_string = |mut a: String, v: &u8| {
+        let new_char = char::from(*v);
+        a.push(new_char);
+        return a;
+    };
+
+    if read_result.is_ok() {
+        println!(
+            "Data found: {}",
+            read_result
+                .ok()
+                .unwrap()
+                .iter()
+                .fold(String::from(""), convert_bytes_to_string)
+        );
+    }
+}
+
 pub fn create_file() {
     let path = "./dir/file01.txt";
     let path2 = "./dir/file02.txt";
